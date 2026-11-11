@@ -145,13 +145,13 @@
     <div class="card">
       <div class="card-head"><div class="num">02</div><h2>День 2<small>Практика</small></h2></div>
       <fieldset class="q"><legend>Який результат тесту?</legend><div class="opts" data-name="testScore"></div></fieldset>
-      <fieldset class="q premium-only"><legend>Чи довелося відкривати AI-помічника?<span class="badge">Premium</span></legend><div class="opts col" data-name="aiHelper"></div></fieldset>
+      <fieldset class="q premium-only"><legend>Чи вдалося скористатися AI-помічником під час тесту?<span class="badge">Premium</span></legend><div class="opts col" data-name="aiHelper"></div></fieldset>
     </div>
 
     <div class="card">
       <div class="card-head"><div class="num">03</div><h2>День 3<small>Повторення</small></h2></div>
       <fieldset class="q"><legend>Чи допомогло повторення?</legend><div class="opts col" data-name="repeatHelp"></div></fieldset>
-      <fieldset class="q premium-only"><legend>Чи було відкрито AI-аналіз у цей день?<span class="badge">Premium</span></legend><div class="opts" data-name="aiAnalysis"></div></fieldset>
+      <fieldset class="q premium-only"><legend>Чи вдалося скористатися AI-аналізом перед повторенням?<span class="badge">Premium</span></legend><div class="opts" data-name="aiAnalysis"></div></fieldset>
     </div>
 
     <div class="card">
@@ -190,7 +190,7 @@
 
 <script>
 /* ───── 1. ВСТАВТЕ СЮДИ URL ВЕБ-ЗАСТОСУНКУ APPS SCRIPT ───── */
-const API_URL = 'https://script.google.com/macros/s/AKfycbxouRwIMU1gFxlGfZEYgfQrC61wFwLOi7Yzlvx8ExSJqH5uhhS5JMERiribqiiNIrQY/exec';
+const API_URL = 'https://script.google.com/macros/s/AKfycbzJYup9rRp4mEIjePp9uNQ_xzkxQMb-eXtwKMTI_uVMGltVNUEEHen_b69WFrB0lNlF/exec';
 
 /* Варіанти відповідей. Мають збігатися з QUESTIONS у Code.gs */
 const OPTIONS = {
@@ -243,10 +243,11 @@ async function api(payload, tries = 4) {
     try {
       const r = await fetch(API_URL, { method: 'POST', body: JSON.stringify(payload) });
       const data = await r.json();
-      if (data.error === 'busy' && t < tries) throw new Error('busy');
+      // busy і server_error часто минають за секунду, тож пробуємо ще раз (повтор безпечний: той самий нік дає той самий код)
+      if ((data.error === 'busy' || data.error === 'server_error') && t < tries) throw new Error(data.error);
       return data;
     } catch (err) {
-      if (t === tries) return { ok: false, error: err.message === 'busy' ? 'busy' : 'network' };
+      if (t === tries) return { ok: false, error: ['busy', 'server_error'].includes(err.message) ? err.message : 'network' };
       await new Promise(res => setTimeout(res, delay + Math.random() * 800));
       delay *= 2;
     }
