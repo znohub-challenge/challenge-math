@@ -110,7 +110,7 @@
 
   <section class="hero">
     <h1>3 дні позаду!</h1>
-    <p>Дай відповідь на кілька коротких питань і забирай свій подарунок. Це займе близько хвилини.</p>
+    <p>Дай відповідь на кілька коротких запитань і забирай свій подарунок. Це займе близько хвилини.</p>
   </section>
 
   <div class="closed">
@@ -150,14 +150,14 @@
 
     <div class="card">
       <div class="card-head"><div class="num">03</div><h2>День 3<small>Повторення</small></h2></div>
-      <fieldset class="q"><legend>Чи допомогло повторення?</legend><div class="opts col" data-name="repeatHelp"></div></fieldset>
+      <fieldset class="q"><legend>Чи допомогло тобі повторення?</legend><div class="opts col" data-name="repeatHelp"></div></fieldset>
       <fieldset class="q premium-only"><legend>Чи вдалося скористатися AI-аналізом перед повторенням?<span class="badge">Premium</span></legend><div class="opts" data-name="aiAnalysis"></div></fieldset>
     </div>
 
     <div class="card">
       <fieldset class="q">
         <legend>Наскільки челендж був корисним для тебе?</legend>
-        <p class="hint" style="margin:-4px 0 12px">Оціни, чи допоміг він краще спланувати навчання, розібратися з темою або повернутися в ритм</p>
+        <p class="hint" style="margin:-4px 0 12px">Оціни, чи допоміг він краще спланувати навчання, розібратися з темою або повернутися до навчального ритму</p>
         <div class="opts scale" data-name="rating"></div>
         <div class="scale-legend"><span>Зовсім не допоміг</span><span>Дуже допоміг</span></div>
       </fieldset>
@@ -184,7 +184,7 @@
     <div class="gift-msg" id="giftMsg" role="status"></div>
   </section>
 
-  <p class="hand">Крок за кроком до омріяного результату!<small>від твоїх бадді з математики</small></p>
+  <p class="hand">Крок за кроком до омріяного результату!<small>— від твоїх бадді з математики</small></p>
 </div>
 <div class="bar"></div>
 
@@ -209,7 +209,7 @@ const PREMIUM_ONLY = ['aiHelper','aiAnalysis'];
 const ERRORS = {
   closed: 'Прийом відповідей уже завершено.',
   bad_nick: 'Перевір нік у Telegram.',
-  bad_field: 'Здається, одне з питань пропущено. Перевір, будь ласка, усі відповіді.',
+  bad_field: 'Здається, одне із запитань пропущено. Перевір, будь ласка, усі відповіді.',
   busy: 'Зараз багато учнів одночасно. Спробуй ще раз за кілька хвилин, твої відповіді не загубляться.',
   server_error: 'Щось пішло не так. Спробуй ще раз за хвилину.',
   network: 'Не вдалося достукатися до сервера. Перевір інтернет і спробуй ще раз за кілька хвилин.',
@@ -292,7 +292,7 @@ $('#form').addEventListener('submit', async e => {
   for (const name of Object.keys(OPTIONS)) {
     if (PREMIUM_ONLY.includes(name) && !premium) continue;
     const v = fd.get(name);
-    if (!v) return fail('Здається, одне з питань пропущено. Перевір, будь ласка, усі відповіді.', `[data-name="${name}"]`);
+    if (!v) return fail('Здається, одне із запитань пропущено. Перевір, будь ласка, усі відповіді.', `[data-name="${name}"]`);
     payload[name] = v;
   }
 
